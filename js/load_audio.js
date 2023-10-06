@@ -227,7 +227,7 @@ function insert_mov(day){
   }
 
   timeslider.addEventListener('mouseup',sliderdropped)
-  timeslider.addEventListener('ontouchend',sliderdropped)
+  timeslider.addEventListener('touchend',sliderdropped)
 }
 
 // Make a list of days
