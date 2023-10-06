@@ -213,7 +213,7 @@ function insert_mov(day){
     viddiv.currentTime = viddiv.duration * perc
     viddiv.pause()
   })
-  timeslider.addEventListener('mouseup',() =>{
+  function sliderdropped(){
     let perc = viddiv.currentTime/viddiv.duration
     timeslider.value = (timeslider.max-timeslider.min)*perc + timeslider.min
     if(perc==100)
@@ -222,7 +222,10 @@ function insert_mov(day){
       viddiv.play()
     else
       viddiv.pause()
-  })
+  }
+
+  timeslider.addEventListener('mouseup',sliderdropped)
+  timeslider.addEventListener('ontouchend',sliderdropped)
 }
 
 // Make a list of days
