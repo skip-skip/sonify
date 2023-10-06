@@ -201,6 +201,8 @@ function insert_mov(day){
     if (viddiv.paused){
       playtxt.textContent = "PAUSE"
       viddiv.play()
+      viddiv.muted=false
+      viddiv.volume=1
     }
     else{
       playtxt.textContent = "PLAY"
