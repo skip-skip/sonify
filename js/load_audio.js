@@ -88,7 +88,7 @@ function insert_wav(timestamp){
   slider.setAttribute('max','10')
   slider.setAttribute('value','2')
 
-  sliderlbl.appendChild(document.createTextNode("1.0x"))
+  sliderlbl.appendChild(document.createTextNode("0.5x"))
   sliderlbl.appendChild(slider)
   sliderlbl.appendChild(document.createTextNode("5.0x"))
   optiondiv.appendChild(sliderlbl);
@@ -114,7 +114,6 @@ function insert_wav(timestamp){
   })
 }
 
-const viddim = ['640','480']
 function insert_mov(day){
   var maindiv = document.createElement('div')
   var collapsebtn = document.createElement('button')
@@ -132,15 +131,16 @@ function insert_mov(day){
   content.appendChild(optiondiv)
 
   var playbtn = document.createElement("button")
-  var playtxt = document.createTextNode("Play/pause")
+  playbtn.setAttribute('class','playbutton')
+  var playtxt = document.createTextNode("PLAY")
   
   playbtn.appendChild(playtxt);
   optiondiv.appendChild(playbtn);
 
-
   var speedlbl = document.createElement("label")
   speedlbl.appendChild(document.createTextNode("Playback rate: 1.0x"))
   speedlbl.setAttribute('id','rate'+day)
+  speedlbl.setAttribute('class','speedlabel')
   optiondiv.appendChild(speedlbl);
 
   var sliderlbl = document.createElement("label")
@@ -150,15 +150,15 @@ function insert_mov(day){
   slider.setAttribute('max','10')
   slider.setAttribute('value','2')
 
-  sliderlbl.appendChild(document.createTextNode("1.0x"))
+  sliderlbl.appendChild(document.createTextNode("0.5x"))
   sliderlbl.appendChild(slider)
   sliderlbl.appendChild(document.createTextNode("5.0x"))
+  sliderlbl.setAttribute('class', 'speedslider')
   optiondiv.appendChild(sliderlbl);
 
   // Add video to html
   var viddiv = document.createElement("video")
-  viddiv.setAttribute('width', viddim[0])
-  viddiv.setAttribute('length', viddim[1])
+  viddiv.setAttribute('class','player')
 //  viddiv.setAttribute('controls',true)
   viddiv.preservesPitch = false
 
@@ -175,20 +175,20 @@ function insert_mov(day){
   var timediv = document.createElement("div")
   content.appendChild(timediv)
   var timeslider = document.createElement("input")
-  timeslider.setAttribute('width',1000)
+  timeslider.setAttribute('class', 'timeslider')
   timediv.appendChild(timeslider)
   timeslider.setAttribute('type','range')
   timeslider.setAttribute('min','0')
-  timeslider.setAttribute('max','100')
+  timeslider.setAttribute('max','1000')
   timeslider.setAttribute('value','0')
 
   function updateTime(sld){
     let perc = viddiv.currentTime/viddiv.duration
-    sld.value = 100*perc
+    sld.value = (timeslider.max-timeslider.min)*perc + timeslider.min
     if(perc==100)
       playtxt.textContent = "PLAY"
   }
-  //var intID = setInterval(updateTime,500,timeslider)
+  var intID = setInterval(updateTime,100,timeslider)
   // Set the playback rate
   slider.addEventListener('input', (e) => {
     var speed = speedMultiple*e.target.valueAsNumber
@@ -215,7 +215,7 @@ function insert_mov(day){
   })
   timeslider.addEventListener('mouseup',() =>{
     let perc = viddiv.currentTime/viddiv.duration
-    timeslider.value = 100*perc
+    timeslider.value = (timeslider.max-timeslider.min)*perc + timeslider.min
     if(perc==100)
       playtxt.textContent = "PLAY"
     else if (playtxt.textContent == "PAUSE")

@@ -25,3 +25,25 @@ html * {
     overflow: hidden;
     background-color: #f1f1f1;
   }
+
+  .player {
+    height: 70%;
+    width: 100%;
+  }
+  .timeslider {
+    width:100%;
+  }
+  .playbutton {
+    width:20%;
+    background-color: lightgray ;
+    border: none;
+    color: black;
+    text-align: center;
+    display: inline-block;
+  }
+  .speedlabel {
+    width:30%;
+    vertical-align: center;
+  }
+  .speedslider {
+  }
