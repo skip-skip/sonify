@@ -79,7 +79,6 @@ function insert_wav(timestamp){
   var speedlbl = document.createElement("label")
   speedlbl.appendChild(document.createTextNode("Playback rate: 1.0x"))
   speedlbl.setAttribute('id','rate'+timestamp)
-  console.log(speedlbl.id)
   optiondiv.appendChild(speedlbl);
 
   var sliderlbl = document.createElement("label")
@@ -117,14 +116,20 @@ function insert_wav(timestamp){
 
 const viddim = ['640','480']
 function insert_mov(day){
-  var file = 'vids/mov_'+day+'.mov'
-  console.log(file)
-  var wavname = document.createElement('h2')
-  wavname.textContent=day
-  document.body.appendChild(wavname);
+  var maindiv = document.createElement('div')
+  var collapsebtn = document.createElement('button')
+  collapsebtn.innerHTML=day
+  collapsebtn.setAttribute('class', 'collapsible')
+  maindiv.appendChild(collapsebtn)
+  var content = document.createElement('div')
+  content.setAttribute('class', 'content')
+  maindiv.appendChild(content)
+  content.style.display = 'none'
+  document.body.appendChild(maindiv)
+  
   var optiondiv = document.createElement("div")
   optiondiv.setAttribute('style','display: flex; margin: 1rem 0; gap: 1rem;')
-  document.body.appendChild(optiondiv)
+  content.appendChild(optiondiv)
 
   var playbtn = document.createElement("button")
   var playtxt = document.createTextNode("Play/pause")
@@ -136,7 +141,6 @@ function insert_mov(day){
   var speedlbl = document.createElement("label")
   speedlbl.appendChild(document.createTextNode("Playback rate: 1.0x"))
   speedlbl.setAttribute('id','rate'+day)
-  console.log(speedlbl.id)
   optiondiv.appendChild(speedlbl);
 
   var sliderlbl = document.createElement("label")
@@ -155,14 +159,36 @@ function insert_mov(day){
   var viddiv = document.createElement("video")
   viddiv.setAttribute('width', viddim[0])
   viddiv.setAttribute('length', viddim[1])
+//  viddiv.setAttribute('controls',true)
   viddiv.preservesPitch = false
 
-  document.body.appendChild(viddiv)
-  vidsrc = document.createElement('source')
-  vidsrc.setAttribute('src', file)
+  content.appendChild(viddiv)
+  var vidsrc = document.createElement('source')
+  vidsrc.setAttribute('src', 'vids/mov_'+day+'.mov')
   vidsrc.setAttribute('type', 'video/mp4')
   viddiv.appendChild(vidsrc)
+  var vidsrc2 = document.createElement('source')
+  vidsrc2.setAttribute('src', 'vids/mov_'+day+'.mp4')
+  vidsrc.setAttribute('type', 'video/mp4')
+  viddiv.appendChild(vidsrc2)
 
+  var timediv = document.createElement("div")
+  content.appendChild(timediv)
+  var timeslider = document.createElement("input")
+  timeslider.setAttribute('width',1000)
+  timediv.appendChild(timeslider)
+  timeslider.setAttribute('type','range')
+  timeslider.setAttribute('min','0')
+  timeslider.setAttribute('max','100')
+  timeslider.setAttribute('value','0')
+
+  function updateTime(sld){
+    let perc = viddiv.currentTime/viddiv.duration
+    sld.value = 100*perc
+    if(perc==100)
+      playtxt.textContent = "PLAY"
+  }
+  //var intID = setInterval(updateTime,500,timeslider)
   // Set the playback rate
   slider.addEventListener('input', (e) => {
     var speed = speedMultiple*e.target.valueAsNumber
@@ -172,10 +198,55 @@ function insert_mov(day){
 
   // Play/pause
   playbtn.addEventListener('click', () => {
-    viddiv.paused ? viddiv.play() : viddiv.pause()
+    if (viddiv.paused){
+      playtxt.textContent = "PAUSE"
+      viddiv.play()
+    }
+    else{
+      playtxt.textContent = "PLAY"
+      viddiv.pause()
+    }
+  })
+
+  timeslider.addEventListener('input', () => {
+    let perc = timeslider.value/(timeslider.max-timeslider.min)
+    viddiv.currentTime = viddiv.duration * perc
+    viddiv.pause()
+  })
+  timeslider.addEventListener('mouseup',() =>{
+    let perc = viddiv.currentTime/viddiv.duration
+    timeslider.value = 100*perc
+    if(perc==100)
+      playtxt.textContent = "PLAY"
+    else if (playtxt.textContent == "PAUSE")
+      viddiv.play()
+    else
+      viddiv.pause()
   })
 }
 
-const times = ['080']
+// Make a list of days
+var times = [];
+for(let i = 80; i <= 105; i++){
+  s = i.toString()
+  if(s.length <= 2)
+    s = '0' + s
+  times.push(s)
+}
 
 times.forEach(insert_mov)
+
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
