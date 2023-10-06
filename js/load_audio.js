@@ -161,8 +161,7 @@ function insert_mov(day){
   viddiv.setAttribute('class','player')
 //  viddiv.setAttribute('controls',true)
   viddiv.preservesPitch = false
-  viddiv.setAttribute('controls',true)
-
+viddiv.
   content.appendChild(viddiv)
   var vidsrc = document.createElement('source')
   vidsrc.setAttribute('src', 'vids/mov_'+day+'.mov')
