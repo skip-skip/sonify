@@ -159,16 +159,17 @@ function insert_mov(day){
   // Add video to html
   var viddiv = document.createElement("video")
   viddiv.setAttribute('class','player')
+  viddiv.setAttribute('preload','metadata')
 //  viddiv.setAttribute('controls',true)
   viddiv.preservesPitch = false
   
   content.appendChild(viddiv)
   var vidsrc = document.createElement('source')
-  vidsrc.setAttribute('src', 'vids/mov_'+day+'.mov')
+  vidsrc.setAttribute('src', 'vids/mov_'+day+'.mov#t=0.1')
   vidsrc.setAttribute('type', 'video/mp4')
   viddiv.appendChild(vidsrc)
   var vidsrc2 = document.createElement('source')
-  vidsrc2.setAttribute('src', 'vids/mov_'+day+'.mp4')
+  vidsrc2.setAttribute('src', 'vids/mov_'+day+'.mp4#t=0.1')
   vidsrc.setAttribute('type', 'video/mp4')
   viddiv.appendChild(vidsrc2)
 
